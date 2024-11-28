@@ -1,0 +1,13 @@
+{
+    "name": "custom/yajra",
+    "description": "Make custom in yajra package",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Custom\\Yajra\\": "src/"
+        }
+    }
+}
