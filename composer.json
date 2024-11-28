@@ -1,0 +1,21 @@
+{
+    "name": "magdy-custom/yajra",
+    "description": "Make custom in yajra package",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=8.2"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/Magdy-Tech-Solutions/Yajra-custom-provider"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Custom\\Yajra\\": "src/"
+        }
+    }
+}
