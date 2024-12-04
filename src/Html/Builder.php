@@ -54,6 +54,8 @@ class Builder
      */
     protected array $tableAttributes = [];
 
+    protected array $tableTheadClass = [];
+
     protected string $template = '';
 
     protected array $attributes = [
@@ -139,7 +141,8 @@ class Builder
     public function getOptions(): array
     {
         return array_merge(
-            $this->attributes, [
+            $this->attributes,
+            [
                 'ajax' => $this->ajax,
                 'columns' => $this->collection->map(function (Column $column) {
                     $column = $column->toArray();
@@ -174,22 +177,30 @@ class Builder
         $th = $this->compileTableHeaders();
         $htmlAttr = $this->html->attributes($this->tableAttributes);
 
-        $tableHtml = '<table'.$htmlAttr.'>';
+        $tableHtml = '<table' . $htmlAttr . '>';
         $searchHtml = $drawSearch
-                ? '<tr class="search-filter">'.implode('', $this->compileTableSearchHeaders()).'</tr>'
-                : '';
+            ? '<tr class="search-filter">' . implode('', $this->compileTableSearchHeaders()) . '</tr>'
+            : '';
 
-        $tableHtml .= '<thead'.($this->theadClass ?? '').'>';
-        $tableHtml .= '<tr>'.implode('', $th).'</tr>'.$searchHtml.'</thead>';
+        $tableHtml .= '<thead'.($this->tableTheadClass ?? '').'>';
+        $tableHtml .= '<tr>' . implode('', $th) . '</tr>' . $searchHtml . '</thead>';
 
         if ($drawFooter) {
             $tf = $this->compileTableFooter();
-            $tableHtml .= '<tfoot><tr>'.implode('', $tf).'</tr></tfoot>';
+            $tableHtml .= '<tfoot><tr>' . implode('', $tf) . '</tr></tfoot>';
         }
 
         $tableHtml .= '</table>';
 
         return new HtmlString($tableHtml);
+    }
+
+    public function theadClass(array $attributes) {
+        foreach ($attributes as $attribute => $value) {
+            $this->tableTheadClass[$attribute] = $value;
+        }
+
+        return $this;
     }
 
     /**

@@ -5,7 +5,8 @@
     "license": "MIT",
     "minimum-stability": "dev",
     "require": {
-        "php": ">=8.2"
+        "php": ">=8.2",
+        "yajra/laravel-datatables-oracle": "^10.0"
     },
     "repositories": [
         {
