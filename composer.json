@@ -6,7 +6,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=8.2",
-        "yajra/laravel-datatables-oracle": "^10.0"
+        "yajra/laravel-datatables-oracle": "*"
     },
     "repositories": [
         {
