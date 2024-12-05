@@ -155,7 +155,8 @@ abstract class DataTable implements DataTableButtons
         $request = app('datatables.request');
 
         /** @var Builder $builder */
-        $builder = app('datatables.html');
+        // $builder = app('datatables.html');
+        $builder = app(\Custom\Yajra\Html\Builder::class);
 
         $this->request = $request;
         $this->htmlBuilder = $builder;
