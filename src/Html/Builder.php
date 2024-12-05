@@ -16,9 +16,14 @@ use Yajra\DataTables\Utilities\Helper;
 class Builder extends DataTablesHtmlBuilder
 {
     /**
-     * @var array<string, string|null>
+     * @var string $theadTableClass
      */
-    protected $theadTableClass = '';
+    protected string $theadTableClass = '';
+
+    /**
+     * @var string $theadTableClass
+     */
+    protected string $trTheadTableClass = '';
 
 
     /**
@@ -31,13 +36,13 @@ class Builder extends DataTablesHtmlBuilder
         $th = $this->compileTableHeaders();
         $htmlAttr = $this->html->attributes($this->tableAttributes);
 
-        $tableHtml = '<table' . $htmlAttr . '>';
+        $tableHtml = '<table ' . $htmlAttr . '>';
         $searchHtml = $drawSearch
             ? '<tr class="search-filter">' . implode('', $this->compileTableSearchHeaders()) . '</tr>'
             : '';
 
-        $tableHtml .= '<thead ' . ($this->theadTableClass) . '>';
-        $tableHtml .= '<tr>' . implode('', $th) . '</tr>' . $searchHtml . '</thead>';
+        $tableHtml .= '<thead ' . $this->theadTableClass . '>';
+        $tableHtml .= '<tr ' . $this->trTheadTableClass . '>' . implode('', $th) . '</tr>' . $searchHtml . '</thead>';
 
         if ($drawFooter) {
             $tf = $this->compileTableFooter();
@@ -52,6 +57,7 @@ class Builder extends DataTablesHtmlBuilder
     public function theadAttr(array $attributes)
     {
         $class = '';
+
         foreach ($attributes as $key => $value) {
             if (is_int($key)) {
                 $class .= " $value";
@@ -61,7 +67,27 @@ class Builder extends DataTablesHtmlBuilder
                 $class .= " $key=\"$value\"";
             }
         }
+
         $this->theadTableClass = trim($class);
+
+        return $this;
+    }
+
+    public function trTheadAttr(array $attributes)
+    {
+        $class = '';
+
+        foreach ($attributes as $key => $value) {
+            if (is_int($key)) {
+                $class .= " $value";
+            } elseif (is_array($value)) {
+                $class .= " $key=\"" . implode(' ', $value) . "\"";
+            } else {
+                $class .= " $key=\"$value\"";
+            }
+        }
+
+        $this->trTheadTableClass = trim($class);
 
         return $this;
     }
