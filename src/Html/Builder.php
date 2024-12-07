@@ -91,4 +91,12 @@ class Builder extends DataTablesHtmlBuilder
 
         return $this;
     }
+
+    public function thAttr(array $attributes) {
+        foreach ($this->collection as $collection) {
+            $collection->attributes = $attributes;
+        }
+
+        return $this;
+    }
 }
