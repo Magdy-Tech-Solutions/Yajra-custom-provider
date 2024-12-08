@@ -2,16 +2,8 @@
 
 namespace Custom\Yajra\Html;
 
-use Illuminate\Contracts\Config\Repository;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
-use Illuminate\Support\Traits\Macroable;
 use Yajra\DataTables\Html\Builder as DataTablesHtmlBuilder;
-use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\HtmlBuilder;
-use Yajra\DataTables\Html\Parameters;
-use Yajra\DataTables\Utilities\Helper;
 
 class Builder extends DataTablesHtmlBuilder
 {
@@ -21,10 +13,27 @@ class Builder extends DataTablesHtmlBuilder
     protected string $theadTableClass = '';
 
     /**
-     * @var string $theadTableClass
+     * @var string $trTheadTableClass
      */
     protected string $trTheadTableClass = '';
 
+    /**
+     * @var string $additionalBodyAttribute
+     */
+    protected string $additionalBodyAttribute = '';
+
+    /**
+     * Generate DataTable javascript.
+     */
+    public function scripts(?string $script = null, array $attributes = []): HtmlString
+    {
+        $script = $script ?: $this->generateScripts();
+        $attributes = $this->html->attributes(
+            array_merge($attributes, ['type' => $attributes['type'] ?? static::$jsType])
+        );
+
+        return new HtmlString("<script{$attributes}>$script;{$this->additionalBodyAttribute}</script>");
+    }
 
     /**
      * Generate DataTable's table html.
@@ -92,10 +101,35 @@ class Builder extends DataTablesHtmlBuilder
         return $this;
     }
 
-    public function thAttr(array $attributes) {
+    public function thAttr(array $attributes)
+    {
         foreach ($this->collection as $collection) {
             $collection->attributes = $attributes;
         }
+
+        return $this;
+    }
+
+    public function tbodyAttr(array $attributes)
+    {
+        $table_id = $this->tableAttributes['id'];
+
+        $setAttributes = '';
+        foreach ($attributes as $key => $value) {
+            if (is_int($key)) {
+                $setAttributes .= "setAttribute('$value')";
+            } else {
+                $setAttributes .= "setAttribute('$key', '$value')";
+            }
+        }
+
+        $script = `
+            let tbody = document.querySelector('#$table_id tbody');
+
+            tbody.$setAttributes;
+        `;
+
+        $this->additionalBodyAttribute .= $script;
 
         return $this;
     }
